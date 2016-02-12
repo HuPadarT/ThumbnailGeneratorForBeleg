@@ -1,0 +1,2 @@
+c:\users\tpa\documents\visual studio 2013\Projects\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\ThumbnailGeneratorForBeleg.exe.config
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\ThumbnailGeneratorForBeleg.exe.config
