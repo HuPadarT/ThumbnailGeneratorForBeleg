@@ -80,7 +80,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageFilter\MessageFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -107,6 +106,51 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Add.png" />
+    <Resource Include="Resources\asterisk_orange.png" />
+    <Resource Include="Resources\bin_empty.png" />
+    <Resource Include="Resources\Building.png" />
+    <Resource Include="Resources\calendar_add.png" />
+    <Resource Include="Resources\Cancel.png" />
+    <Resource Include="Resources\Car.png" />
+    <Resource Include="Resources\client_account_template.png" />
+    <Resource Include="Resources\coins_in_hand.png" />
+    <Resource Include="Resources\Cross.png" />
+    <Resource Include="Resources\database_go.png" />
+    <Resource Include="Resources\date_go.png" />
+    <Resource Include="Resources\directory_listing.png" />
+    <Resource Include="Resources\Disk.png" />
+    <Resource Include="Resources\document_copies.png" />
+    <Resource Include="Resources\drawer_open.png" />
+    <Resource Include="Resources\error.png" />
+    <Resource Include="Resources\error_go.png" />
+    <Resource Include="Resources\file_extension_doc.png" />
+    <Resource Include="Resources\file_extension_jpg.png" />
+    <Resource Include="Resources\file_extension_pdf.png" />
+    <Resource Include="Resources\file_extension_xls.png" />
+    <Resource Include="Resources\Find.png" />
+    <Resource Include="Resources\folder.png" />
+    <Resource Include="Resources\Group.png" />
+    <Resource Include="Resources\key.png" />
+    <Resource Include="Resources\key_go.png" />
+    <Resource Include="Resources\lightning_go.png" />
+    <Resource Include="Resources\link_add.png" />
+    <Resource Include="Resources\link_delete.png" />
+    <Resource Include="Resources\Magnifier.png" />
+    <Resource Include="Resources\money.png" />
+    <Resource Include="Resources\money_add.png" />
+    <Resource Include="Resources\office_apps.png" />
+    <Resource Include="Resources\page_white.png" />
+    <Resource Include="Resources\panel_resize.png" />
+    <Resource Include="Resources\Pencil.png" />
+    <Resource Include="Resources\pencil_add.png" />
+    <Resource Include="Resources\pencil_delete.png" />
+    <Resource Include="Resources\tag_blue.png" />
+    <Resource Include="Resources\tick.png" />
+    <Resource Include="Resources\Timeline.png" />
+    <Resource Include="Resources\update.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -27,13 +27,12 @@ namespace ThumbnailGeneratorForBeleg
     /// </summary>
     public partial class MainWindow : System.Windows.Window, INotifyPropertyChanged
     {
+        
         public MainWindow()
         {
             InitializeComponent();
             errorList = new List<string>();
             filesList = new List<string>();
-            userCancel = new bool();
-            userCancel = false;
             this.DataContext = this;
         }
 
@@ -45,7 +44,20 @@ namespace ThumbnailGeneratorForBeleg
             set
             {
                 this.userCancel = value;
+                if (userCancel) UserStart = false;
                 OnPropertyChanged("UserCancel");
+            }
+        }
+
+        private bool userStart;
+        public bool UserStart
+        {
+            get { return this.userStart; }
+            set
+            {
+                this.userStart = value;
+                if (userStart) UserCancel = false;
+                OnPropertyChanged("UserStart");
             }
         }
 
@@ -194,6 +206,65 @@ namespace ThumbnailGeneratorForBeleg
             }
             //MessageFilter.Revoke();
         }
+
+        private void StartProcess()
+        {
+            string[] dirs = Directory.GetDirectories(DirPath);
+            DirCnt = Directory.GetFiles(DirPath, "*.doc", SearchOption.AllDirectories).Count();
+            string[] files;
+            int FilesCount = 0;
+
+            ParallelOptions po = new ParallelOptions();
+            //po.CancellationToken = cts.Token;
+            po.MaxDegreeOfParallelism = 4;
+            System.Threading.Tasks.Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    Parallel.ForEach(dirs, po, dir =>
+                    {
+                        if (!UserCancel)
+                        {
+                            files = Directory.GetFiles(dir, "*.doc", SearchOption.AllDirectories);
+                            List<string> fl = new List<string>();
+                            foreach (string l in files)
+                            {
+                                fl.Add(l);
+                            }
+                            FilesList = fl;
+                            foreach (string f in files)
+                            {
+                                if (!UserCancel)
+                                {
+                                    PreviewToFile(f);
+                                    Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                                    {
+                                        ++FilesCount;
+                                        FileCnt = FilesCount;
+                                    }));
+                                }
+                            }
+                        }
+                    });
+                }
+                catch(Exception ex)
+                {
+                    List<string> hibak = new List<string>();
+                    if (Errorlist.Count != 0) hibak = Errorlist;
+                    hibak.Add(ex.Message);
+                    Errorlist = hibak;
+                    //MessageBox.Show(ex.Message);
+                }
+            }).ContinueWith((a) =>
+            {
+                System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        MessageBox.Show("Finished!");
+                    }));
+            });
+
+        }
         #endregion
 
         #region buttons click event
@@ -221,60 +292,16 @@ namespace ThumbnailGeneratorForBeleg
 
         private void btnStop_Click(object sender, RoutedEventArgs e) // strop all thread
         {
+            //if (!UserCancel) UserCancel = true;
+            //else UserCancel = false;
             UserCancel = true;
+
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
-            string[] dirs = Directory.GetDirectories(DirPath);
-            DirCnt = Directory.GetFiles(DirPath, "*.doc", SearchOption.AllDirectories).Count();
-            string[] files;
-            int FilesCount = 0;
-            ParallelOptions po = new ParallelOptions();
-            //po.CancellationToken = cts.Token;
-            po.MaxDegreeOfParallelism = 4;
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    Parallel.ForEach(dirs, po, dir =>
-                    {
-                       // if (UserCancel) cts.Cancel();
-
-                        files = Directory.GetFiles(dir, "*.doc", SearchOption.AllDirectories);
-                        List<string> fl = new List<string>();
-                        foreach (string l in files)
-                        {
-                            fl.Add(l);
-                        }
-                        FilesList = fl;
-                        foreach (string f in files)
-                        {
-                            PreviewToFile(f);
-                            Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-                            {
-                                ++FilesCount;
-                                FileCnt = FilesCount;
-                            }));
-                        }
-                    });
-                }
-                catch(Exception ex)
-                {
-                    List<string> hibak = new List<string>();
-                    if (Errorlist.Count != 0) hibak = Errorlist;
-                    hibak.Add(ex.Message);
-                    Errorlist = hibak;
-                    //MessageBox.Show(ex.Message);
-                }
-            }).ContinueWith((a) =>
-            {
-                System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-                    new Action(() =>
-                    {
-                        MessageBox.Show("Finished!");
-                    }));
-            });
+            UserStart = true;
+            StartProcess();
         }
         #endregion
 
