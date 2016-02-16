@@ -1,2 +1,18 @@
 c:\users\tpa\documents\visual studio 2013\Projects\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\ThumbnailGeneratorForBeleg.exe.config
 C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\ThumbnailGeneratorForBeleg.exe.config
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\ThumbnailGeneratorForBeleg.exe
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\ThumbnailGeneratorForBeleg.pdb
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\MainWindow.baml
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\MainWindow.g.cs
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\App.g.cs
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg_MarkupCompile.cache
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.g.resources
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.Properties.Resources.resources
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.csproj.GenerateResource.Cache
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.exe
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.pdb
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.csprojResolveAssemblyReference.cache
