@@ -161,6 +161,10 @@ namespace ThumbnailGeneratorForBeleg
             //if (!UserCancel) UserCancel = true;
             //else UserCancel = false;
             UserCancel = true;
+            Errorlist.Clear();
+            FilesList.Clear();
+            FileCnt = 0;
+            DirCnt = 0;
 
         }
 
@@ -168,6 +172,24 @@ namespace ThumbnailGeneratorForBeleg
         {
             UserStart = true;
             core.StartProcess(main);
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void execTransparencyMenuItem(object sender, RoutedEventArgs e)
+        {
+            if ((sender as MenuItem).IsChecked)
+                this.Opacity = 0.7;
+            else
+                this.Opacity = 1;
+        }
+
+        private void execClose(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
         #endregion
 
