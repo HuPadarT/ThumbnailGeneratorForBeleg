@@ -4,12 +4,13 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Threading;
 
 namespace ThumbnailGeneratorForBeleg.Processing
 {
     public class CreatePreview
     {
-        public void PreviewToFile(string sourcefile, MainWindow maw)
+        public void PreviewToFile(string sourcefile, MainWindow maw, StreamWriter errwr)
         {
             string filename1 = Path.GetFileName(sourcefile);
             string docPath = sourcefile.Replace(filename1, string.Empty);
@@ -68,20 +69,22 @@ namespace ThumbnailGeneratorForBeleg.Processing
                 }
                 catch (System.Exception ex)
                 {
-                    List<string> hibak = new List<string>();
-                    if (maw.Errorlist.Count != 0) hibak = maw.Errorlist;
-                    hibak.Add(docPath + ": " + ex.Message);
-                    maw.Errorlist = hibak;
-                    //MessageBox.Show(ex.Message);
+                    System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                    {
+                        maw.AddErrorList(ex.Message);
+                        errwr.WriteLine(ex.Message);
+                        errwr.Flush();
+                    }));
                 }
             }
             catch (System.Exception ex)
             {
-                List<string> hibak = new List<string>();
-                if (maw.Errorlist.Count != 0) hibak = maw.Errorlist;
-                hibak.Add(docPath + ": " + ex.Message);
-                maw.Errorlist = hibak;
-                //MessageBox.Show(ex.Message);
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                {
+                    maw.AddErrorList(ex.Message);
+                    errwr.WriteLine(ex.Message);
+                    errwr.Flush();
+                }));
             }
             finally
             {

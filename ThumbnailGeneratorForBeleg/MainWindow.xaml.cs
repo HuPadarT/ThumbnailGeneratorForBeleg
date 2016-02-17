@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ThumbnailGeneratorForBeleg.Model;
 using ThumbnailGeneratorForBeleg.Processing;
 
 namespace ThumbnailGeneratorForBeleg
@@ -30,18 +31,35 @@ namespace ThumbnailGeneratorForBeleg
     {
         private Core core;
         MainWindow main;
+        private static PropertyChangeBase pcb;
+
+        public static List<SourceFile> FilesList = new List<SourceFile>();
 
         public MainWindow()
         {
             InitializeComponent();
-            errorList = new List<string>();
-            filesList = new List<string>();
-            this.DataContext = this;
             core = new Core();
             main = this;
+            errorList = new List<string>();
+            DirPath = string.Empty;
+            TargetPath = string.Empty;
+            this.DataContext = this;
+
+            ProgStat = "Please select source directory!";
         }
 
         #region main program members
+        public bool AddFileList(SourceFile item)
+        {
+            if (item != null)
+            {
+                FilesList.Add(item);
+                OnPropertyChanged("FilesList");
+                return true;
+            }
+            else return false;
+        }
+
         private bool userCancel;
         public bool UserCancel
         {
@@ -88,6 +106,17 @@ namespace ThumbnailGeneratorForBeleg
             }
         }
 
+        private string progStat;
+        public string ProgStat
+        {
+            get { return this.progStat; }
+            set
+            {
+                this.progStat = value;
+                OnPropertyChanged("ProgStat");
+            }
+        }
+
         private int dirCnt;
         public int DirCnt
         {
@@ -110,26 +139,21 @@ namespace ThumbnailGeneratorForBeleg
             }
         }
 
-        private List<string> filesList;
-        public List<string> FilesList
-        {
-            get { return this.filesList; }
-            set
-            {
-                this.filesList = value;
-                OnPropertyChanged("FilesList");
-            }
-        }
-
         private List<string> errorList;
         public List<string> Errorlist
         {
             get { return this.errorList; }
-            set
+        }
+
+        public bool AddErrorList(string item)
+        {
+            if (item != null)
             {
-                this.errorList = value;
-                OnPropertyChanged("Errorlist");
+                errorList.Add(item);
+                OnPropertyChanged("errorList");
+                return true;
             }
+            else return false;
         }
         #endregion
 
@@ -143,6 +167,8 @@ namespace ThumbnailGeneratorForBeleg
             {
                 DirPath = dialog.FileName;
             }
+            if(TargetPath == string.Empty || TargetPath == null)
+                ProgStat = "Please select Target directory!";
         }
 
         private void btnTaget_Click(object sender, RoutedEventArgs e)
@@ -154,23 +180,35 @@ namespace ThumbnailGeneratorForBeleg
             {
                 TargetPath = dialog.FileName;
             }
+            if (DirPath == string.Empty || DirPath == null)
+                ProgStat = "Please select Source directory!";
+            else
+                ProgStat = "Please click Start button!";
         }
 
         private void btnStop_Click(object sender, RoutedEventArgs e) // strop all thread
         {
-            //if (!UserCancel) UserCancel = true;
-            //else UserCancel = false;
             UserCancel = true;
-            Errorlist.Clear();
-            FilesList.Clear();
-            FileCnt = 0;
-            DirCnt = 0;
-
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            Errorlist.Clear();
+            FilesList.Clear();
+            FileCnt = 0;
+            DirCnt = 0;
+            if (DirPath == string.Empty || DirPath == null)
+            {
+                ProgStat = "Please select Source directory!";
+                return;
+            }
+            else if (TargetPath == string.Empty || TargetPath == null)
+            {
+                ProgStat = "Please select Target directory!";
+                return;
+            }
             UserStart = true;
+            ProgStat = "I reading direrctories and files (this take long time), please wait!!";
             core.StartProcess(main);
         }
 

@@ -74,12 +74,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\State.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\PropertyChangeBase.cs" />
+    <Compile Include="Model\SourceFile.cs" />
     <Compile Include="Processing\Core.cs" />
     <Compile Include="Processing\CreatePreview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

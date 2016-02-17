@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using ThumbnailGeneratorForBeleg.Enums;
+using ThumbnailGeneratorForBeleg.Model;
 using ThumbnailGeneratorForBeleg.Processing;
 
 namespace ThumbnailGeneratorForBeleg.Processing
@@ -24,49 +26,67 @@ namespace ThumbnailGeneratorForBeleg.Processing
             ParallelOptions po = new ParallelOptions();
             //po.CancellationToken = cts.Token;
             po.MaxDegreeOfParallelism = 4;
+            mn.ProgStat = "Processing files, plase wait... if you want to stop processing then press Stop button.";
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
-                try
+                using (StreamWriter writerError = new StreamWriter("Error_log.txt"))
                 {
-                    Parallel.ForEach(dirs, po, dir =>
+                    try
                     {
-                        if (!mn.UserCancel)
+                        Parallel.ForEach(dirs, po, dir =>
                         {
-                            files = Directory.GetFiles(dir, "*.doc", SearchOption.AllDirectories);
-                            List<string> fl = new List<string>();
-                            foreach (string l in files)
+                            if (!mn.UserCancel)
                             {
-                                fl.Add(l);
-                            }
-                            mn.FilesList = fl;
-                            foreach (string f in files)
-                            {
-                                if (!mn.UserCancel)
+                                files = Directory.GetFiles(dir, "*.doc", SearchOption.AllDirectories);
+                                foreach (string l in files)
                                 {
-                                    cp.PreviewToFile(f, mn);
+                                    SourceFile item = new SourceFile();
+                                    item.FileNev = Path.GetFileNameWithoutExtension(l);
+                                    item.Path = Path.GetFullPath(l).Replace(Path.GetFileName(l), string.Empty);
+                                    item.State = State.Init;
                                     System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                                     {
-                                        ++FilesCount;
-                                        mn.FileCnt = FilesCount;
+                                        mn.AddFileList(item);
                                     }));
                                 }
+                                foreach (string f in files)
+                                {
+                                    if (!mn.UserCancel)
+                                    {
+                                        cp.PreviewToFile(f, mn, writerError);
+                                        System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                                        {
+                                            ++FilesCount;
+                                            mn.FileCnt = FilesCount;
+                                        }));
+                                    }
+                                }
                             }
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    List<string> hibak = new List<string>();
-                    if (mn.Errorlist.Count != 0) hibak = mn.Errorlist;
-                    hibak.Add(ex.Message);
-                    mn.Errorlist = hibak;
-                    //MessageBox.Show(ex.Message);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                        {
+                            mn.AddErrorList(ex.Message);
+                            writerError.WriteLine(ex.Message);
+                            writerError.Flush();
+                        }));
+                    }
                 }
             }).ContinueWith((a) =>
             {
                 System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
                     new Action(() =>
                     {
+                        if (!mn.UserCancel) mn.ProgStat = "Files processing done.";
+                        else
+                        {
+                            string txt = "Files processing stoped by User.";
+                            mn.ProgStat = txt;
+                            mn.AddErrorList(txt);
+                        }
+                        mn.UserStart = false;
                         MessageBox.Show("Finished!");
                     }));
             });
