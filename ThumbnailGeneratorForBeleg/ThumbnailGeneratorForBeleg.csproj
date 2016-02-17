@@ -80,6 +80,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Processing\Core.cs" />
+    <Compile Include="Processing\CreatePreview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -151,6 +153,13 @@
     <Resource Include="Resources\tick.png" />
     <Resource Include="Resources\Timeline.png" />
     <Resource Include="Resources\update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vaiting_balls_cursor.gif" />
+    <Resource Include="Resources\vaiting_hipno_cursor.gif" />
+    <Resource Include="Resources\vaiting_lines_cursor.gif" />
+    <Resource Include="Resources\vaiting_rainbow_cursor.gif" />
+    <Resource Include="Resources\waiting_vista_cursor_transparent.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

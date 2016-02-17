@@ -47,7 +47,7 @@
         <Button x:Name="btnTaget" Content="Browse" Grid.Column="3" Grid.Row="1" Margin="10,10" Click="btnTaget_Click"/>
         <Button x:Name="btnStart" Grid.Column="3" Grid.Row="3" Margin="10,57,10,140" Click="btnStart_Click">
             <StackPanel Orientation="Horizontal">
-                <Image Source="pack://application:,,,/Resources/Building.png" Height="25" Width="18" Style="{StaticResource StartButtonStyle}"/>
+                <Image Source="pack://application:,,,/Resources/waiting_vista_cursor_transparent.gif" Height="25" Width="25" Style="{StaticResource StartButtonStyle}"/>
                 <TextBlock Text=" Start " Height="20" Margin="5,3,0,0"/>
             </StackPanel>
         </Button>
