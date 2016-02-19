@@ -85,6 +85,7 @@
     <Compile Include="Model\SourceFile.cs" />
     <Compile Include="Processing\Core.cs" />
     <Compile Include="Processing\CreatePreview.cs" />
+    <Compile Include="Processing\ImageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

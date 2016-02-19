@@ -21,10 +21,10 @@ namespace ThumbnailGeneratorForBeleg.Processing
 
             //MessageFilter .Register();
             var app = new Microsoft.Office.Interop.Word.Application();
-
+            ImageHandler imgh = new ImageHandler();
             app.Visible = false;
 
-            var doc = app.Documents.Open(sourcefile);
+            var doc = app.Documents.Open(sourcefile, ReadOnly:true);
 
             try
             {
@@ -51,19 +51,14 @@ namespace ThumbnailGeneratorForBeleg.Processing
 
                         using (var b = new Bitmap(image2.Width, image2.Height))
                         {
-                            int resize = 1;
-                            if (image2.Width > 700 || image2.Height > 950) resize = 10;
-                            else if (image2.Width > 500 || image2.Height > 700) resize = 6;
-                            else if (image2.Width > 350 || image2.Height > 500) resize = 4;
-                            else if (image2.Width > 200 || image2.Height > 350) resize = 2;
-                            b.SetResolution((image2.HorizontalResolution / resize), (image2.VerticalResolution) / resize);
+                            b.SetResolution(image2.HorizontalResolution, image2.VerticalResolution);
 
                             using (var g = Graphics.FromImage(b))
                             {
                                 g.Clear(System.Drawing.Color.White);
                                 g.DrawImageUnscaled(image2, 0, 0);
                             }
-                            b.Save(imgTarget, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            imgh.SaveImage(b, 250, 400, 80, imgTarget);
                         }
                     }
                 }
