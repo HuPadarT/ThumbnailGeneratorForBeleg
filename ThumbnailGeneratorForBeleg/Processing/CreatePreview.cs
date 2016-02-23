@@ -10,7 +10,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
 {
     public class CreatePreview
     {
-        public void PreviewToFile(string sourcefile, MainWindow maw, StreamWriter errwr)
+        public void PreviewToFile(string sourcefile, Core maw, StreamWriter errwr)
         {
             string filename1 = Path.GetFileName(sourcefile);
             string docPath = sourcefile.Replace(filename1, string.Empty);
