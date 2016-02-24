@@ -5,20 +5,28 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Threading;
+using ThumbnailGeneratorForBeleg.Model;
 
 namespace ThumbnailGeneratorForBeleg.Processing
 {
     public class CreatePreview
     {
-        public void PreviewToFile(string sourcefile, Core maw, StreamWriter errwr)
+        public void PreviewToFile(SourceFile sourcefile, Core maw, StreamWriter errwr)
         {
-            string filename1 = Path.GetFileName(sourcefile);
-            string docPath = sourcefile.Replace(filename1, string.Empty);
+            string filename1 = Path.GetFileName(sourcefile.FPath);
+            string docPath = sourcefile.Path;
             string targetpath = maw.TargetPath + (docPath.Replace(maw.DirPath, string.Empty));
             string target = targetpath + filename1.Split('.')[0] + ".png";
             string imgTarget = Path.ChangeExtension(target, "jpg");
-            if (File.Exists(imgTarget)) return;
-
+            if (File.Exists(imgTarget))
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                {
+                    maw.MarKesz++;
+                }));
+                return;
+            }
+            sourcefile.State = Enums.State.Processing;
             //MessageFilter .Register();
             var app = new Microsoft.Office.Interop.Word.Application();
             ImageHandler imgh = new ImageHandler();
@@ -58,6 +66,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
                                 g.Clear(System.Drawing.Color.White);
                                 g.DrawImageUnscaled(image2, 0, 0);
                             }
+                            sourcefile.State = Enums.State.Processing;
                             imgh.SaveImage(b, 250, 400, 80, imgTarget);
                         }
                     }
@@ -66,9 +75,12 @@ namespace ThumbnailGeneratorForBeleg.Processing
                 {
                     System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                     {
-                        maw.AddErrorList(ex.Message);
-                        errwr.WriteLine(ex.Message);
+                        sourcefile.State = Enums.State.Error;
+                        sourcefile.Hiba = ex.Message;
+                        maw.AddErrorList(sourcefile.FileNev + ":" + ex.Message);
+                        errwr.WriteLine(sourcefile.FileNev + ":" + ex.Message);
                         errwr.Flush();
+                        maw.ErrorCnt++;
                     }));
                 }
             }
@@ -76,9 +88,12 @@ namespace ThumbnailGeneratorForBeleg.Processing
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                 {
-                    maw.AddErrorList(ex.Message);
-                    errwr.WriteLine(ex.Message);
+                    sourcefile.State = Enums.State.Error;
+                    sourcefile.Hiba = ex.Message;
+                    maw.AddErrorList(sourcefile.FileNev + ":" + ex.Message);
+                    errwr.WriteLine(sourcefile.FileNev + ":" + ex.Message);
                     errwr.Flush();
+                    maw.ErrorCnt++;
                 }));
             }
             finally

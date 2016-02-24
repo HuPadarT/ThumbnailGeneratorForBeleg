@@ -40,7 +40,6 @@ namespace ThumbnailGeneratorForBeleg
             core.ProgStat = "Please select source directory!";
         }
 
-
         #region buttons click event
         private void btnSource_Click(object sender, RoutedEventArgs e)
         {

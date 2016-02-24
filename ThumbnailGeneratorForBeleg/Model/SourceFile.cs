@@ -31,6 +31,28 @@ namespace ThumbnailGeneratorForBeleg.Model
             }
         }
 
+        public string fPath;
+        public string FPath
+        {
+            get { return this.fPath; }
+            set
+            {
+                this.fPath = value;
+                OnPropertyChanged("FPath");
+            }
+        }
+
+        public string hiba;
+        public string Hiba
+        {
+            get { return this.hiba; }
+            set
+            {
+                this.hiba = value;
+                OnPropertyChanged("Hiba");
+            }
+        }
+
         private State state;
         public State State
         {

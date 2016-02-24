@@ -43,18 +43,24 @@
                 <RowDefinition Height="28*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="114*"/>
-                <ColumnDefinition Width="191*"/>
-                <ColumnDefinition Width="250*"/>
-                <ColumnDefinition Width="175*"/>
+                <ColumnDefinition Width="82*"/>
+                <ColumnDefinition Width="112*"/>
+                <ColumnDefinition Width="67*"/>
+                <ColumnDefinition Width="82*"/>
+                <ColumnDefinition Width="88*"/>
+                <ColumnDefinition Width="84*"/>
+                <ColumnDefinition Width="75*"/>
+                <ColumnDefinition Width="140*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Source directory: " VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,10,0,9" Height="26" Width="102"/>
-            <TextBox Text="{Binding Path=DirPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0" Margin="10,10" Grid.ColumnSpan="2"/>
-            <Button x:Name="btnSource" Content="Browse"  Grid.Column="3" Grid.Row="0" Margin="10,10" Click="btnSource_Click"/>
-            <ListView ItemsSource="{Binding Path=Errorlist}" Grid.Row="3" Margin="10,0" Grid.ColumnSpan="2"/>
-            <DataGrid Visibility="Visible" MinHeight="150" Grid.Column="2" Grid.Row="3" Margin="6,4,10,0" 
+            <Label Content="Source directory: " VerticalAlignment="Center" HorizontalAlignment="Right" Margin="-20,10,0,9" Height="26" Width="102"/>
+            <TextBox Text="{Binding Path=DirPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0" Margin="10,10" Grid.ColumnSpan="6"/>
+            <Button x:Name="btnSource" Content="Browse"  Grid.Column="7" Grid.Row="0" Margin="10,10" Click="btnSource_Click"/>
+            <Label Content="Target directory: " Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="-18,9,0,10" Height="26" Width="100"/>
+            <TextBox Text="{Binding Path=TargetPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Margin="10,10" Grid.ColumnSpan="6"/>
+            <ListView ItemsSource="{Binding Path=Errorlist, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="10,0,0,0" Grid.ColumnSpan="3"/>
+            <DataGrid Visibility="Visible" MinHeight="150" Grid.Column="3" Grid.Row="3" Margin="10,4,10,0" 
                              AutoGenerateColumns="False" 
-                             ItemsSource="{Binding FilesList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                             ItemsSource="{Binding Path=FilesList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="4">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Style.Triggers>
@@ -77,31 +83,33 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="30*" MaxWidth="120" Header="File Name" Binding="{Binding Path=FileNev}"/>
-                    <DataGridTextColumn Width="1*" Header="Process State" Binding="{Binding Path=state}"/>
+                    <DataGridTextColumn Width="30*" MaxWidth="120" Header="File Name" Binding="{Binding Path=FileNev, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Width="1*" Header="Process State" Binding="{Binding Path=state, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <Label Content="Target directory: " Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,9,0,10" Height="26" Width="100"/>
-            <TextBox Text="{Binding Path=TargetPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Margin="10,10" Grid.ColumnSpan="2"/>
-            <Button x:Name="btnTaget" Content="Browse" Grid.Column="3" Grid.Row="1" Margin="10,10" Click="btnTaget_Click"/>
-            <Button x:Name="btnStart" Grid.Column="3" Grid.Row="3" Margin="10,57,10,112" Click="btnStart_Click">
+            <Button x:Name="btnTaget" Content="Browse" Grid.Column="7" Grid.Row="1" Margin="10,10" Click="btnTaget_Click"/>
+            <Button x:Name="btnStart" Grid.Column="7" Grid.Row="3" Margin="10,57,10,112" Click="btnStart_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/Resources/waiting_vista_cursor_transparent.gif" Height="25" Width="25" Style="{StaticResource StartButtonStyle}"/>
                     <TextBlock Text=" Start " Height="20" Margin="5,3,0,0"/>
                 </StackPanel>
             </Button>
-            <Button x:Name="btnStop" Grid.Column="3" Grid.Row="3" Margin="10,151,10,18" Click="btnStop_Click">
+            <Button x:Name="btnStop" Grid.Column="7" Grid.Row="3" Margin="10,151,10,18" Click="btnStop_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/Resources/Cancel.png" Height="25" Width="18" Style="{StaticResource StopButtonStyle}"/>
                     <TextBlock Text="Stop " Height="20" Margin="5,3,0,0"/>
                 </StackPanel>
             </Button>
-            <Label Content="All files: " Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,0,0" Height="26" Width="102"/>
-            <Label Content="Files count: " Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,0,0" Height="26" Width="69"/>
-            <Label Content="{Binding Path=DirCnt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,10,0" Height="26" Width="117"/>
-            <Label Content="{Binding Path=FileCnt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,10,0" Height="26" Width="104"/>
-            <Label Content="Program status: " Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,0,0" Height="26" Width="100"/>
-            <Label Content="{Binding Path=ProgStat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,10,0" Height="26" Width="601"/>
+            <Label Content="All files: " Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,0,0" Height="26" Width="59"/>
+            <Label Content="{Binding Path=DirCnt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,10,0" Height="26" Width="88" Grid.Column="1"/>
+            <Label Content="Error cnt: " Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,0,0" Height="26" Width="57"/>
+            <Label Content="{Binding Path=ErrorCnt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" Margin="4,2,0,0" Height="26"/>
+            <Label Content="Already done: " Grid.Column="4" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,0,0" Height="26" Width="83"/>
+            <Label Content="{Binding Path=MarKesz, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Grid.Row="2" VerticalAlignment="Center" Margin="4,2,0,0" Height="26"/>
+            <Label Content="Files count: " Grid.Column="6" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,0,0" Height="26" Width="69"/>
+            <Label Content="{Binding Path=FileCnt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,10,0" Height="26" Width="104"/>
+            <Label Content="Program status: " Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="-18,2,0,0" Height="26" Width="100"/>
+            <Label Content="{Binding Path=ProgStat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,2,10,0" Height="26" Width="601"/>
         </Grid>
 
     </Border>

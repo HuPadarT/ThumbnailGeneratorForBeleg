@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,14 @@ namespace ThumbnailGeneratorForBeleg.Processing
     public class Core : PropertyChangeBase
     {
         private CreatePreview cp = new CreatePreview();
-        public static List<SourceFile> FilesList;
 
         #region main program members
+        private static ObservableCollection<SourceFile> filesList;
+        public static ObservableCollection<SourceFile> FilesList
+        {
+            get { return filesList; }
+        }
+
         public bool AddFileList(SourceFile item)
         {
             if (item != null)
@@ -86,6 +92,28 @@ namespace ThumbnailGeneratorForBeleg.Processing
             }
         }
 
+        private int errorCnt;
+        public int ErrorCnt
+        {
+            get { return this.errorCnt; }
+            set
+            {
+                this.errorCnt = value;
+                OnPropertyChanged("ErrorCnt");
+            }
+        }
+
+        private int marKesz;
+        public int MarKesz
+        {
+            get { return this.marKesz; }
+            set
+            {
+                this.marKesz = value;
+                OnPropertyChanged("MarKesz");
+            }
+        }
+
         private int dirCnt;
         public int DirCnt
         {
@@ -108,8 +136,8 @@ namespace ThumbnailGeneratorForBeleg.Processing
             }
         }
 
-        private List<string> errorList;
-        public List<string> Errorlist
+        private ObservableCollection<string> errorList;
+        public ObservableCollection<string> Errorlist
         {
             get { return this.errorList; }
         }
@@ -128,10 +156,12 @@ namespace ThumbnailGeneratorForBeleg.Processing
 
         public void StartProcess()
         {
-            errorList = new List<string>();
+            errorList = new ObservableCollection<string>();
             FileCnt = 0;
             DirCnt = 0;
-            FilesList = new List<SourceFile>();
+            MarKesz = 0;
+            ErrorCnt = 0;
+            filesList = new ObservableCollection<SourceFile>();
             string[] dirs = Directory.GetDirectories(DirPath);
             DirCnt = Directory.GetFiles(DirPath, "*.doc", SearchOption.AllDirectories).Count();
             int FilesCount = 0;
@@ -144,48 +174,52 @@ namespace ThumbnailGeneratorForBeleg.Processing
             {
                 using (StreamWriter writerError = new StreamWriter("Error_log.txt"))
                 {
-                    try
+                    Parallel.ForEach(dirs, po, dir =>
                     {
-                        Parallel.ForEach(dirs, po, dir =>
+                        if (!UserCancel)
                         {
-                            if (!UserCancel)
+                            string[] files = Directory.GetFiles(dir, "*.doc", SearchOption.AllDirectories);
+                            foreach (string l in files)
                             {
-                                string[] files = Directory.GetFiles(dir, "*.doc", SearchOption.AllDirectories);
-                                foreach (string l in files)
+                                SourceFile item = new SourceFile();
+                                item.FileNev = Path.GetFileNameWithoutExtension(l);
+                                item.Path = Path.GetFullPath(l).Replace(Path.GetFileName(l), string.Empty);
+                                item.FPath = Path.GetFullPath(l);
+                                item.State = State.Init;
+                                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                                 {
-                                    SourceFile item = new SourceFile();
-                                    item.FileNev = Path.GetFileNameWithoutExtension(l);
-                                    item.Path = Path.GetFullPath(l).Replace(Path.GetFileName(l), string.Empty);
-                                    item.State = State.Init;
+                                    AddFileList(item);
+                                }));
+                            }
+                            foreach (var f in FilesList)
+                            {
+                                if (!UserCancel)
+                                {
+                                    cp.PreviewToFile(f, this, writerError);
+                                    if(f.Hiba == string.Empty)
+                                        f.State = State.Finised;
                                     System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                                     {
-                                        AddFileList(item);
+                                        ++FilesCount;
+                                        FileCnt = FilesCount;
                                     }));
                                 }
-                                foreach (string f in files)
-                                {
-                                    if (!UserCancel)
-                                    {
-                                        cp.PreviewToFile(f, this, writerError);
-                                        System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-                                        {
-                                            ++FilesCount;
-                                            FileCnt = FilesCount;
-                                        }));
-                                    }
-                                }
                             }
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-                        {
-                            AddErrorList(ex.Message);
-                            writerError.WriteLine(ex.Message);
-                            writerError.Flush();
-                        }));
-                    }
+                        }
+                    });
+                    //try
+                    //{
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                    //    {
+                    //        AddErrorList(sourcefile + ":" + ex.Message);
+                    //        writerError.WriteLine(sourcefile + ":" + ex.Message);
+                    //        writerError.Flush();
+                    //        ErrorCnt++;
+                    //    }));
+                    //}
                 }
             }).ContinueWith((a) =>
             {
