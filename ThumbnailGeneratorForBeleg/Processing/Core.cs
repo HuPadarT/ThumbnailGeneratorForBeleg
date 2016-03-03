@@ -17,6 +17,16 @@ namespace ThumbnailGeneratorForBeleg.Processing
     {
         private CreatePreview cp = new CreatePreview();
 
+        public Core()
+        {
+            FileCnt = 0;
+            DirCnt = 0;
+            MarKesz = 0;
+            ErrorCnt = 0;
+            filesList = new ObservableCollection<SourceFile>();
+            errorList = new ObservableCollection<string>();
+        }
+
         #region main program members
         private static ObservableCollection<SourceFile> filesList;
         public static ObservableCollection<SourceFile> FilesList
@@ -136,10 +146,10 @@ namespace ThumbnailGeneratorForBeleg.Processing
             }
         }
 
-        private ObservableCollection<string> errorList;
-        public ObservableCollection<string> Errorlist
+        private static ObservableCollection<string> errorList;
+        public static ObservableCollection<string> Errorlist
         {
-            get { return this.errorList; }
+            get { return errorList; }
         }
 
         public bool AddErrorList(string item)
@@ -156,70 +166,46 @@ namespace ThumbnailGeneratorForBeleg.Processing
 
         public void StartProcess()
         {
-            errorList = new ObservableCollection<string>();
-            FileCnt = 0;
-            DirCnt = 0;
-            MarKesz = 0;
-            ErrorCnt = 0;
-            filesList = new ObservableCollection<SourceFile>();
-            string[] dirs = Directory.GetDirectories(DirPath);
-            DirCnt = Directory.GetFiles(DirPath, "*.doc", SearchOption.AllDirectories).Count();
+            filesList.Clear();
+            errorList.Clear();
+            string[] files = Directory.GetFiles(DirPath, "*.doc", SearchOption.AllDirectories);
+            foreach (string l in files)
+            {
+                SourceFile item = new SourceFile();
+                item.FileNev = Path.GetFileNameWithoutExtension(l);
+                item.Path = Path.GetFullPath(l).Replace(Path.GetFileName(l), string.Empty);
+                item.FPath = Path.GetFullPath(l);
+                item.State = State.Init;
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                {
+                    AddFileList(item);
+                }));
+            }
+            DirCnt = files.Count();
             int FilesCount = 0;
 
             ParallelOptions po = new ParallelOptions();
             //po.CancellationToken = cts.Token;
-            po.MaxDegreeOfParallelism = 4;
+            po.MaxDegreeOfParallelism = 1;
             ProgStat = "Processing files, plase wait... if you want to stop processing then press Stop button.";
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 using (StreamWriter writerError = new StreamWriter("Error_log.txt"))
                 {
-                    Parallel.ForEach(dirs, po, dir =>
+                    Parallel.ForEach(FilesList, po, f =>
                     {
                         if (!UserCancel)
                         {
-                            string[] files = Directory.GetFiles(dir, "*.doc", SearchOption.AllDirectories);
-                            foreach (string l in files)
+                            cp.PreviewToFile(f, this, writerError);
+                            if (f.Hiba == string.Empty || f.Hiba == null)
+                                f.State = State.Finised;
+                            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                             {
-                                SourceFile item = new SourceFile();
-                                item.FileNev = Path.GetFileNameWithoutExtension(l);
-                                item.Path = Path.GetFullPath(l).Replace(Path.GetFileName(l), string.Empty);
-                                item.FPath = Path.GetFullPath(l);
-                                item.State = State.Init;
-                                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-                                {
-                                    AddFileList(item);
-                                }));
-                            }
-                            foreach (var f in FilesList)
-                            {
-                                if (!UserCancel)
-                                {
-                                    cp.PreviewToFile(f, this, writerError);
-                                    if(f.Hiba == string.Empty)
-                                        f.State = State.Finised;
-                                    System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-                                    {
-                                        ++FilesCount;
-                                        FileCnt = FilesCount;
-                                    }));
-                                }
-                            }
+                                ++FilesCount;
+                                FileCnt = FilesCount;
+                            }));
                         }
                     });
-                    //try
-                    //{
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-                    //    {
-                    //        AddErrorList(sourcefile + ":" + ex.Message);
-                    //        writerError.WriteLine(sourcefile + ":" + ex.Message);
-                    //        writerError.Flush();
-                    //        ErrorCnt++;
-                    //    }));
-                    //}
                 }
             }).ContinueWith((a) =>
             {

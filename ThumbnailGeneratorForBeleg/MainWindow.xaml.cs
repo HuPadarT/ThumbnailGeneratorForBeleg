@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +39,13 @@ namespace ThumbnailGeneratorForBeleg
             this.DataContext = core;
 
             core.ProgStat = "Please select source directory!";
+
+            string version = System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion();
+                //Assembly
+                //     .GetExecutingAssembly()
+                //     .GetReferencedAssemblies()
+                //     .Where(x => x.Name == "System.Core").First().Version.ToString();
+            MessageBox.Show("verzió:" + version);
         }
 
         #region buttons click event

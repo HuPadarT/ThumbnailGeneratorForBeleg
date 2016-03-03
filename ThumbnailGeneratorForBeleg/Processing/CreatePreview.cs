@@ -18,6 +18,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
             string targetpath = maw.TargetPath + (docPath.Replace(maw.DirPath, string.Empty));
             string target = targetpath + filename1.Split('.')[0] + ".png";
             string imgTarget = Path.ChangeExtension(target, "jpg");
+            sourcefile.Hiba = string.Empty;
             if (File.Exists(imgTarget))
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
@@ -32,7 +33,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
             ImageHandler imgh = new ImageHandler();
             app.Visible = false;
 
-            var doc = app.Documents.Open(sourcefile, ReadOnly:true);
+            var doc = app.Documents.Open(sourcefile.FPath, ReadOnly: true);
 
             try
             {
