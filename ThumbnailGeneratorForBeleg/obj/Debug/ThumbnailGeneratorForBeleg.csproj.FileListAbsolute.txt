@@ -16,3 +16,5 @@ C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBe
 C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.exe
 C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.pdb
 C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg.csprojResolveAssemblyReference.cache
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\tpa\Documents\GitHub\ThumbnailGeneratorForBeleg\ThumbnailGeneratorForBeleg\obj\Debug\ThumbnailGeneratorForBeleg_MarkupCompile.lref

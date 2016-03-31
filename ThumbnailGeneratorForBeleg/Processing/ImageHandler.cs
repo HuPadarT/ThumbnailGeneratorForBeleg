@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ThumbnailGeneratorForBeleg.Processing
 {
-    public class ImageHandler
+    public sealed class ImageHandler // smaller picture conversion
     {
         public void SaveImage(Bitmap image, int maxWidth, int maxHeight, int quality, string filePath)
         {
@@ -53,11 +53,6 @@ namespace ThumbnailGeneratorForBeleg.Processing
             newImage.Save(filePath, imageCodecInfo, encoderParameters);
         }
 
-        /// <summary>
-        /// Method to get encoder infor for given image format.
-        /// </summary>
-        /// <param name="format">Image format</param>
-        /// <returns>image codec info.</returns>
         private ImageCodecInfo GetEncoderInfo(ImageFormat format)
         {
             return ImageCodecInfo.GetImageDecoders().SingleOrDefault(c => c.FormatID == format.Guid);

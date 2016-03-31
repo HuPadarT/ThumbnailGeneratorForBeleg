@@ -157,7 +157,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
             if (item != null)
             {
                 errorList.Add(item);
-                OnPropertyChanged("errorList");
+                OnPropertyChanged("Errorlist");
                 return true;
             }
             else return false;
@@ -175,18 +175,16 @@ namespace ThumbnailGeneratorForBeleg.Processing
                 item.FileNev = Path.GetFileNameWithoutExtension(l);
                 item.Path = Path.GetFullPath(l).Replace(Path.GetFileName(l), string.Empty);
                 item.FPath = Path.GetFullPath(l);
-                item.State = State.Init;
-                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-                {
-                    AddFileList(item);
-                }));
+                item.SState = State.Init;
+                AddFileList(item);
             }
             DirCnt = files.Count();
             int FilesCount = 0;
+            MarKesz = 0;
 
             ParallelOptions po = new ParallelOptions();
             //po.CancellationToken = cts.Token;
-            po.MaxDegreeOfParallelism = 1;
+            po.MaxDegreeOfParallelism = 6;
             ProgStat = "Processing files, plase wait... if you want to stop processing then press Stop button.";
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
@@ -198,7 +196,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
                         {
                             cp.PreviewToFile(f, this, writerError);
                             if (f.Hiba == string.Empty || f.Hiba == null)
-                                f.State = State.Finised;
+                                f.SState = State.Finised;
                             System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                             {
                                 ++FilesCount;

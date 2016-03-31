@@ -9,7 +9,7 @@ using ThumbnailGeneratorForBeleg.Model;
 
 namespace ThumbnailGeneratorForBeleg.Processing
 {
-    public class CreatePreview
+    public sealed class CreatePreview
     {
         public void PreviewToFile(SourceFile sourcefile, Core maw, StreamWriter errwr)
         {
@@ -24,10 +24,15 @@ namespace ThumbnailGeneratorForBeleg.Processing
                 System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                 {
                     maw.MarKesz++;
+                    sourcefile.SState = Enums.State.Error;
+                    sourcefile.Hiba = "Already exist";
+                    maw.AddErrorList(sourcefile.FileNev + ": " + "Already exist");
+                    errwr.WriteLine(sourcefile.FileNev + ": " + "Already exist");
+                    errwr.Flush();
                 }));
                 return;
             }
-            sourcefile.State = Enums.State.Processing;
+            sourcefile.SState = Enums.State.Processing;
             //MessageFilter .Register();
             var app = new Microsoft.Office.Interop.Word.Application();
             ImageHandler imgh = new ImageHandler();
@@ -67,7 +72,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
                                 g.Clear(System.Drawing.Color.White);
                                 g.DrawImageUnscaled(image2, 0, 0);
                             }
-                            sourcefile.State = Enums.State.Processing;
+                            sourcefile.SState = Enums.State.Processing;
                             imgh.SaveImage(b, 250, 400, 80, imgTarget);
                         }
                     }
@@ -76,7 +81,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
                 {
                     System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                     {
-                        sourcefile.State = Enums.State.Error;
+                        sourcefile.SState = Enums.State.Error;
                         sourcefile.Hiba = ex.Message;
                         maw.AddErrorList(sourcefile.FileNev + ":" + ex.Message);
                         errwr.WriteLine(sourcefile.FileNev + ":" + ex.Message);
@@ -89,7 +94,7 @@ namespace ThumbnailGeneratorForBeleg.Processing
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                 {
-                    sourcefile.State = Enums.State.Error;
+                    sourcefile.SState = Enums.State.Error;
                     sourcefile.Hiba = ex.Message;
                     maw.AddErrorList(sourcefile.FileNev + ":" + ex.Message);
                     errwr.WriteLine(sourcefile.FileNev + ":" + ex.Message);
