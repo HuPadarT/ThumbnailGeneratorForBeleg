@@ -7,60 +7,60 @@ using ThumbnailGeneratorForBeleg.Enums;
 
 namespace ThumbnailGeneratorForBeleg.Model
 {
-    public sealed class SourceFile : INotifyPropertyChanged
+    public class SourceFile : INotifyPropertyChanged
     {
-        public string _fileNev;
-        public string FileNev
-        {
-            get { return this._fileNev; }
-            set
-            {
-                this._fileNev = value;
-                OnPropertyChanged("FileNev");
-            }
-        }
-
-        private State _state;
-        public State SState
-        {
-            get { return this._state; }
-            set
-            {
-                this._state = value;
-                OnPropertyChanged("SState");
-            }
-        }
-
-        public string _path;
+        public string path;
         public string Path
         {
-            get { return this._path; }
+            get { return this.path; }
             set
             {
-                this._path = value;
+                this.path = value;
                 OnPropertyChanged("Path");
             }
         }
 
-        public string _fPath;
-        public string FPath
+        public string fileNev;
+        public string FileNev
         {
-            get { return this._fPath; }
+            get { return this.fileNev; }
             set
             {
-                this._fPath = value;
+                this.fileNev = value;
+                OnPropertyChanged("FileNev");
+            }
+        }
+
+        public string fPath;
+        public string FPath
+        {
+            get { return this.fPath; }
+            set
+            {
+                this.fPath = value;
                 OnPropertyChanged("FPath");
             }
         }
 
-        public string _hiba;
+        public string hiba;
         public string Hiba
         {
-            get { return this._hiba; }
+            get { return this.hiba; }
             set
             {
-                this._hiba = value;
+                this.hiba = value;
                 OnPropertyChanged("Hiba");
+            }
+        }
+
+        private State state;
+        public State State
+        {
+            get { return this.state; }
+            set
+            {
+                this.state = value;
+                OnPropertyChanged("State");
             }
         }
 
